@@ -24,6 +24,7 @@
     <ProjectGuid>{b405edc6-d698-49a5-b56e-a430fbd0737e}</ProjectGuid>
     <RootNamespace>GDEV40003BPDFramework</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Hyperspeed</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

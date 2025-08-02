@@ -167,7 +167,7 @@ void Render()
 
 	SDL_SetRenderTarget(g_Renderer, NULL);
 	SDL_RenderClear(g_Renderer);
-	SDL_RenderCopyEx(g_Renderer, g_RenderTex, NULL, NULL, 90, NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(g_Renderer, g_RenderTex, NULL, NULL, 0, NULL, SDL_FLIP_NONE);
 
 	//Update the screen
 	SDL_RenderPresent(g_Renderer);
