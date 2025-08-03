@@ -39,8 +39,12 @@ void Character::Update(float deltaTime, SDL_Event e)
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_LEFT:
-			m_Moving_Left = true;
-			m_Moving = true;
+
+			if (!m_Moving)
+			{
+				m_Moving_Left = true;
+				m_Moving = true;
+			}
 
 			if (m_Moving)
 			{
@@ -48,9 +52,12 @@ void Character::Update(float deltaTime, SDL_Event e)
 			}
 			break;
 		case SDLK_RIGHT:
-			m_Moving_Right = true;
-			m_Moving = true;
 
+			if (!m_Moving)
+			{
+				m_Moving_Right = true;
+				m_Moving = true;
+			}
 			if (m_Moving)
 			{
 				m_MovementWhoosh->Play(0);
@@ -63,6 +70,7 @@ void Character::Update(float deltaTime, SDL_Event e)
 		}
 	}
 
+	//Handle Evercade input
 	if (e.type == SDL_JOYBUTTONDOWN)
 	{
 		switch (e.jbutton.button)
@@ -133,10 +141,11 @@ void Character::Update(float deltaTime, SDL_Event e)
 		ResetRotationOverTime(deltaTime);
 	}
 
+	//Handle Randomisation of Y position for "change" in character speed
 	if (!m_HitYTarget)
 	{
 
-		int currentY = 0;
+		float currentY = 0;
 
 		if (m_YTarget < GetPosition().y)
 		{
@@ -190,9 +199,9 @@ void Character::MoveIntoLane(float deltaTime, LANES laneToMoveTo, int laneXPos, 
 	switch (direction)
 	{
 	case FACING_LEFT:
-		if (roundf(GetPosition().x) > laneXPos - (m_Texture->GetWidth() / 2))
+		if (roundf(GetPosition().x) > laneXPos - (m_Texture->GetWidth() / 2)) //Check if the character is not yet in the target lane
 		{
-			SetPosition(Vector2D(GetPosition().x - deltaTime * MOVEMENTSPEED, GetPosition().y));
+			SetPosition(Vector2D(GetPosition().x - deltaTime * MOVEMENTSPEED, GetPosition().y)); //Move the character towards the target lane over time
 
 			if (m_Rotation > -MAXPLAYERROTATION)
 			{
@@ -207,9 +216,9 @@ void Character::MoveIntoLane(float deltaTime, LANES laneToMoveTo, int laneXPos, 
 		}
 		break;
 	case FACING_RIGHT:
-		if (roundf(GetPosition().x) < laneXPos - (m_Texture->GetWidth() / 2))
+		if (roundf(GetPosition().x) < laneXPos - (m_Texture->GetWidth() / 2)) //Check if the character is not yet in the target lane
 		{
-			SetPosition(Vector2D(GetPosition().x + deltaTime * MOVEMENTSPEED, GetPosition().y));
+			SetPosition(Vector2D(GetPosition().x + deltaTime * MOVEMENTSPEED, GetPosition().y)); //Move the character towards the target lane over time
 
 			if (m_Rotation < MAXPLAYERROTATION)
 			{
