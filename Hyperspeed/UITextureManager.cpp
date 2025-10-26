@@ -14,6 +14,8 @@ void UITextureManager::InitialiseTextures()
 {
 	CreateTextureInMap("UI/", "MoveLeft");
 	CreateTextureInMap("UI/", "MoveRight");
+	CreateTextureInMap("UI/", "MoveLeftKB");
+	CreateTextureInMap("UI/", "MoveRightKB");
 	CreateTextureInMap("UI/", "Coin");
 	CreateTextureInMap("UI/", "PlayerBroken");
 }

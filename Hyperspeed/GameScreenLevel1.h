@@ -51,6 +51,8 @@ private:
 
 	UIObject* m_LeftIcon = nullptr;
 	UIObject* m_RightIcon = nullptr;
+	UIObject* m_LeftIconKB = nullptr;
+	UIObject* m_RightIconKB = nullptr;
 
 	UIObject* m_Coin = nullptr;
 

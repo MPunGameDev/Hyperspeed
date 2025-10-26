@@ -87,27 +87,16 @@ void DeathScreen::Update(float deltaTime, SDL_Event e)
 	m_StarBackgroundPool1->Update(deltaTime, e);
 	m_StarBackgroundPool2->Update(deltaTime, e);
 
+	//Detect any keyup to change back to main menu
+
 	if (e.type == SDL_KEYUP)
 	{
-		switch (e.key.keysym.sym)
-		{
-		case SDLK_ESCAPE:
-			m_GameScreenManager->ChangeScreen(SCREEN_LEVEL1, m_GameScreenManager);
-			break;
-		}
+		m_GameScreenManager->ChangeScreen(SCREEN_LEVEL1, m_GameScreenManager);
 	}
 
 	if (e.type == SDL_JOYBUTTONUP)
 	{
-		switch (e.jbutton.button)
-		{
-		case 11:
-			m_GameScreenManager->ChangeScreen(SCREEN_LEVEL1, m_GameScreenManager);
-			break;
-		case 12:
-			m_GameScreenManager->ChangeScreen(SCREEN_LEVEL1, m_GameScreenManager);
-			break;
-		}
+		m_GameScreenManager->ChangeScreen(SCREEN_LEVEL1, m_GameScreenManager);
 	}
 
 }

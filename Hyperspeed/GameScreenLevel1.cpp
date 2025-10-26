@@ -42,15 +42,21 @@ GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer, GameScreenManager* ma
 
 	m_LeftIcon = new UIObject(m_Renderer, "MoveLeft", Vector2D(LANETHREECENTER, 350), m_UITextureManager);
 	m_RightIcon = new UIObject(m_Renderer, "MoveRight", Vector2D(LANETHREECENTER, 400), m_UITextureManager);
+	m_LeftIconKB = new UIObject(m_Renderer, "MoveLeftKB", Vector2D(LANETHREECENTER - 70, 353), m_UITextureManager); //Magic numbers here are quick fix for windows controls
+	m_RightIconKB = new UIObject(m_Renderer, "MoveRightKB", Vector2D(LANETHREECENTER - 70, 403), m_UITextureManager);
 	m_Coin = new UIObject(m_Renderer, "Coin", Vector2D(LANETWOCENTER, 450), m_UITextureManager);
 
 	//Set size of Move Right Icon
 	m_RightIcon->GetTexture()->SetHeight(m_RightIcon->GetTexture()->GetHeight() / 2.5);
 	m_RightIcon->GetTexture()->SetWidth(m_RightIcon->GetTexture()->GetWidth() / 2.5);
+	m_RightIconKB->GetTexture()->SetHeight(m_RightIconKB->GetTexture()->GetHeight() / 2);
+	m_RightIconKB->GetTexture()->SetWidth(m_RightIconKB->GetTexture()->GetWidth() / 2);
 
 	//Set size of Move Left Icon
 	m_LeftIcon->GetTexture()->SetHeight(m_LeftIcon->GetTexture()->GetHeight() / 2.5);
 	m_LeftIcon->GetTexture()->SetWidth(m_LeftIcon->GetTexture()->GetWidth() / 2.5);
+	m_LeftIconKB->GetTexture()->SetHeight(m_LeftIconKB->GetTexture()->GetHeight() / 2);
+	m_LeftIconKB->GetTexture()->SetWidth(m_LeftIconKB->GetTexture()->GetWidth() / 2);
 
 	m_ExplosionAudio = new Audio("Sounds/Explosion.wav", 1);
 	m_BackgroundMusic = new Audio("Sounds/BackgroundMusic.wav", 2);
@@ -110,6 +116,12 @@ GameScreenLevel1::~GameScreenLevel1()
 	delete m_RightIcon;
 	m_RightIcon = nullptr;
 
+	delete m_LeftIconKB;
+	m_LeftIcon = nullptr;
+
+	delete m_RightIconKB;
+	m_RightIcon = nullptr;
+
 	delete m_UITextureManager;
 	m_UITextureManager = nullptr;
 
@@ -150,12 +162,14 @@ void GameScreenLevel1::Render()
 		m_StarBackgroundPool2->Render();
 		m_Title->RenderAt("HyperSpeed", LANETWOCENTER, 200);
 		m_ControlsTitle->RenderAt("Controls", LANETWOCENTER, 275);
-		m_MoveLeft->RenderAt("Move Left", LANEONECENTER + 50, 350);
-		m_MoveRight->RenderAt("MoveRight", LANEONECENTER + 50, 400);
+		m_MoveLeft->RenderAt("Move Left : ", LANEONECENTER + 50, 350);
+		m_MoveRight->RenderAt("MoveRight : ", LANEONECENTER + 50, 400);
 		m_LeftIcon->Render();
 		m_RightIcon->Render();
+		m_LeftIconKB->Render();
+		m_RightIconKB->Render();
 		m_Coin->Render();
-		m_InsertCoin->RenderAt("Insert Coin to Play (A or B)", LANETWOCENTER, 550);
+		m_InsertCoin->RenderAt("Insert Coin to Play (A/B or Enter)", LANETWOCENTER, 550);
 		my_Character->Render();
 	}
 }
@@ -167,7 +181,7 @@ void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
 	{
 		switch (e.key.keysym.sym)
 		{
-		case SDLK_ESCAPE:
+		case SDLK_RETURN:
 			m_DisplayMainMenu = false;
 			m_IsRunning = true;
 			break;
