@@ -124,7 +124,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -176,11 +176,18 @@
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="ObstaclePool.h" />
     <ClInclude Include="ObstacleTextureManager.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="StarBackgroundPool.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="UIObject.h" />
     <ClInclude Include="UITextureManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Hyperspeed.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\PlayerSprite.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
