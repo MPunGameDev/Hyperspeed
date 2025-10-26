@@ -16,6 +16,8 @@ using namespace std;
 SDL_Window* g_Window = nullptr;
 SDL_Renderer* g_Renderer = nullptr;
 
+SDL_Surface* g_Icon = nullptr;
+
 SDL_Texture* g_RenderTex = nullptr;
 
 GameScreenManager* game_Screen_Manager = nullptr;
@@ -65,12 +67,16 @@ bool InitSDL()
 	else 
 	{
 		//Setup passed so create window
-		g_Window = SDL_CreateWindow("Bespoke Platform Development",
+		g_Window = SDL_CreateWindow("Hyperspeed",
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
 			SCREEN_WIDTH,
 			SCREEN_HEIGHT,
 			SDL_WINDOW_SHOWN);
+
+		//Set Window Icon
+		g_Icon = IMG_Load("Images/WindowIcon/Icon.png");
+		SDL_SetWindowIcon(g_Window, g_Icon);
 
 		//Did the window get created?
 		if (g_Window == nullptr)
