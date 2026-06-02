@@ -153,6 +153,7 @@
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="UIObject.cpp" />
     <ClCompile Include="UITextureManager.cpp" />
+    <ClCompile Include="PlayerData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="UIObject.h" />
     <ClInclude Include="UITextureManager.h" />
+    <ClInclude Include="PlayerData.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Hyperspeed.rc" />
