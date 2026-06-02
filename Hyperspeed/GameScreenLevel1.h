@@ -11,6 +11,7 @@
 #include "UITextureManager.h"
 
 #include "Audio.h"
+#include "CoinPool.h"
 
 class Texture2D;
 class Character;
@@ -57,6 +58,12 @@ private:
 	UIObject* m_Coin = nullptr;
 
 	TextureManager* m_UITextureManager = nullptr;
+
+	//Coin Pool
+	CoinPool* m_CoinPool = nullptr;
+	int m_CoinsCollected = 0;
+	GameText* m_CoinCountText = nullptr;
+	UIObject* m_CoinHUDIcon = nullptr;
 
 	//Distance Text
 	GameText* m_Distance = nullptr;

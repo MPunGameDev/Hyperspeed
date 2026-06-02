@@ -145,6 +145,8 @@
     <ClCompile Include="DeathScreen.cpp" />
     <ClCompile Include="MathsHelper.cpp" />
     <ClCompile Include="ObjectPool.cpp" />
+    <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="CoinPool.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ObstaclePool.cpp" />
     <ClCompile Include="ObstacleTextureManager.cpp" />
@@ -174,6 +176,8 @@
     <ClInclude Include="GameText.h" />
     <ClInclude Include="MathsHelper.h" />
     <ClInclude Include="ObjectPool.h" />
+    <ClInclude Include="Coin.h" />
+    <ClInclude Include="CoinPool.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="ObstaclePool.h" />
     <ClInclude Include="ObstacleTextureManager.h" />

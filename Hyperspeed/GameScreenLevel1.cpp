@@ -3,6 +3,7 @@
 
 #include "Texture2D.h"
 #include "Collisions.h"
+#include "Coin.h"
 #include <iostream>
 
 using namespace std;
@@ -57,6 +58,11 @@ GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer, GameScreenManager* ma
 	m_LeftIcon->GetTexture()->SetWidth(m_LeftIcon->GetTexture()->GetWidth() / 2.5);
 	m_LeftIconKB->GetTexture()->SetHeight(m_LeftIconKB->GetTexture()->GetHeight() / 2);
 	m_LeftIconKB->GetTexture()->SetWidth(m_LeftIconKB->GetTexture()->GetWidth() / 2);
+
+	//Coin Setup (reuses the UITextureManager already created above)
+	m_CoinPool = new CoinPool(m_Renderer, m_UITextureManager);
+	m_CoinCountText = new GameText(m_Renderer, "Fonts/CabalBold.ttf", 20);
+	m_CoinHUDIcon = new UIObject(m_Renderer, "Coin", Vector2D(50, 20), m_UITextureManager);
 
 	m_ExplosionAudio = new Audio("Sounds/Explosion.wav", 1);
 	m_BackgroundMusic = new Audio("Sounds/BackgroundMusic.wav", 2);
@@ -128,6 +134,15 @@ GameScreenLevel1::~GameScreenLevel1()
 	delete m_Coin;
 	m_Coin = nullptr;
 
+	delete m_CoinPool;
+	m_CoinPool = nullptr;
+
+	delete m_CoinCountText;
+	m_CoinCountText = nullptr;
+
+	delete m_CoinHUDIcon;
+	m_CoinHUDIcon = nullptr;
+
 	delete m_Distance;
 	m_Distance = nullptr;
 
@@ -150,7 +165,10 @@ void GameScreenLevel1::Render()
 		m_StarBackgroundPool1->Render();
 		m_StarBackgroundPool2->Render();
 		m_ObstaclePool->Render();
+		m_CoinPool->Render();
 		m_Distance->RenderAt(to_string(m_DistanceTravelled) + " P", LANETWOCENTER, 100);
+		m_CoinHUDIcon->Render();
+		m_CoinCountText->RenderAt(to_string(m_CoinsCollected), 60, 20);
 		my_Character->Render();
 	}
 
@@ -255,6 +273,7 @@ void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
 		m_StarBackgroundPool2->Update(deltaTime, e);
 		my_Character->Update(deltaTime, e);
 		m_ObstaclePool->Update(deltaTime, e);
+		m_CoinPool->Update(deltaTime, e);
 
 		//Iterate over Obstacle Pool and check for collision
 		std::vector<GameObject*>::iterator itr;
@@ -263,8 +282,18 @@ void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
 		{
 			if (Collisions::Instance()->Circle(my_Character, (*itr)))
 			{
-				//If collided stop running
 				m_IsRunning = false;
+			}
+		}
+
+		//Check coin collisions
+		for (itr = m_CoinPool->GetPool().begin(); itr != m_CoinPool->GetPool().end(); ++itr)
+		{
+			Coin* coin = static_cast<Coin*>(*itr);
+			if (Collisions::Instance()->Circle(my_Character, coin))
+			{
+				coin->Collect();
+				m_CoinsCollected++;
 			}
 		}
 

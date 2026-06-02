@@ -77,6 +77,13 @@ void Texture2D::Render(Vector2D new_position, SDL_RendererFlip flip, double angl
 	SetFlip(flip);
 }
 
+void Texture2D::Render(Vector2D new_position, SDL_RendererFlip flip, double angle, int width, int height)
+{
+	SDL_Rect renderLocation = { new_position.x, new_position.y, width, height };
+	SDL_RenderCopyEx(m_Renderer, m_Texture, nullptr, &renderLocation, angle, nullptr, flip);
+	SetFlip(flip);
+}
+
 void Texture2D::SetWidth(int width)
 {
 	m_Width = width;
