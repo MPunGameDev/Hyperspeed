@@ -1,5 +1,6 @@
 #include "GameScreenManager.h"
 #include "GameScreen.h"
+#include "GameScreenMainMenu.h"
 #include "GameScreenLevel1.h"
 #include "DeathScreen.h"
 
@@ -39,7 +40,8 @@ void GameScreenManager::ChangeScreen(SCREENS newScreen, GameScreenManager* manag
 
 	switch (newScreen)
 	{
-		case SCREEN_LEVEL1: tempScreen = new GameScreenLevel1(m_Renderer, manager, true); break;
+		case SCREEN_MAINMENU: tempScreen = new GameScreenMainMenu(m_Renderer, manager); break;
+		case SCREEN_LEVEL1: tempScreen = new GameScreenLevel1(m_Renderer, manager); break;
 		case SCREEN_DEATHSCREEN: tempScreen = new DeathScreen(m_Renderer, manager); break;
 	}
 

@@ -91,12 +91,12 @@ void DeathScreen::Update(float deltaTime, SDL_Event e)
 
 	if (e.type == SDL_KEYUP)
 	{
-		m_GameScreenManager->ChangeScreen(SCREEN_LEVEL1, m_GameScreenManager);
+		m_GameScreenManager->ChangeScreen(SCREEN_MAINMENU, m_GameScreenManager);
 	}
 
 	if (e.type == SDL_JOYBUTTONUP)
 	{
-		m_GameScreenManager->ChangeScreen(SCREEN_LEVEL1, m_GameScreenManager);
+		m_GameScreenManager->ChangeScreen(SCREEN_MAINMENU, m_GameScreenManager);
 	}
 
 }

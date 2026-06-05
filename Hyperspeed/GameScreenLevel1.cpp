@@ -8,16 +8,16 @@
 
 using namespace std;
 
-GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer, GameScreenManager* manager, bool renderMainMenu) : GameScreen(renderer, manager)
+GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer, GameScreenManager* manager) : GameScreen(renderer, manager)
 {
-	m_DisplayMainMenu = renderMainMenu;
-	m_MainMenuFlag = renderMainMenu;
-	m_IsRunning = !renderMainMenu;
+	m_MainMenuFlag = true;
+	m_IsRunning = true;
 
 	SDL_SetRenderDrawColor(m_Renderer, 0x000000, 0x000000, 0x000000, 0x000000);
 
-	//Player Setup
+	//Player Setup — start at top of screen so the intro slide-down plays
 	my_Character = new Character(m_Renderer, "Images/Player/PlayerSprite.png", WINDOWCENTER);
+	my_Character->SetPosition(Vector2D(my_Character->GetPosition().x, 100));
 
 	//Obstacle Setup
 	m_ObstacleTextures = new ObstacleTextureManager(m_Renderer);
@@ -31,58 +31,21 @@ GameScreenLevel1::GameScreenLevel1(SDL_Renderer* renderer, GameScreenManager* ma
 
 	m_UITextureManager = new UITextureManager(m_Renderer);
 
-	//Main Menu Text
-	m_Title = new GameText(m_Renderer, "Fonts/CabalBold.ttf", 35);
-	m_ControlsTitle = new GameText(m_Renderer, "Fonts/CabalBold.ttf", 30);
-	m_MoveLeft = new GameText(m_Renderer, "Fonts/CabalBold.ttf", 20);
-	m_MoveRight = new GameText(m_Renderer, "Fonts/CabalBold.ttf", 20);
-	m_InsertCoin = new GameText(m_Renderer, "Fonts/CabalBold.ttf", 15);
-
 	//Distance Travelled Text
 	m_Distance = new GameText(m_Renderer, "Fonts/CabalBold.ttf", 20);
 
-	m_LeftIcon = new UIObject(m_Renderer, "MoveLeft", Vector2D(LANETHREECENTER, 350), m_UITextureManager);
-	m_RightIcon = new UIObject(m_Renderer, "MoveRight", Vector2D(LANETHREECENTER, 400), m_UITextureManager);
-	m_LeftIconKB = new UIObject(m_Renderer, "MoveLeftKB", Vector2D(LANETHREECENTER - 70, 353), m_UITextureManager); //Magic numbers here are quick fix for windows controls
-	m_RightIconKB = new UIObject(m_Renderer, "MoveRightKB", Vector2D(LANETHREECENTER - 70, 403), m_UITextureManager);
-	m_Coin = new UIObject(m_Renderer, "Coin", Vector2D(LANETWOCENTER, 450), m_UITextureManager);
-
-	//Set size of Move Right Icon
-	m_RightIcon->GetTexture()->SetHeight(m_RightIcon->GetTexture()->GetHeight() / 2.5);
-	m_RightIcon->GetTexture()->SetWidth(m_RightIcon->GetTexture()->GetWidth() / 2.5);
-	m_RightIconKB->GetTexture()->SetHeight(m_RightIconKB->GetTexture()->GetHeight() / 2);
-	m_RightIconKB->GetTexture()->SetWidth(m_RightIconKB->GetTexture()->GetWidth() / 2);
-
-	//Set size of Move Left Icon
-	m_LeftIcon->GetTexture()->SetHeight(m_LeftIcon->GetTexture()->GetHeight() / 2.5);
-	m_LeftIcon->GetTexture()->SetWidth(m_LeftIcon->GetTexture()->GetWidth() / 2.5);
-	m_LeftIconKB->GetTexture()->SetHeight(m_LeftIconKB->GetTexture()->GetHeight() / 2);
-	m_LeftIconKB->GetTexture()->SetWidth(m_LeftIconKB->GetTexture()->GetWidth() / 2);
-
-	//Coin Setup (reuses the UITextureManager already created above)
+	//Coin Setup
 	m_CoinPool = new CoinPool(m_Renderer, m_UITextureManager);
 	m_CoinCountText = new GameText(m_Renderer, "Fonts/CabalBold.ttf", 20);
 	m_CoinHUDIcon = new UIObject(m_Renderer, "Coin", Vector2D(50, 20), m_UITextureManager);
 
 	m_ExplosionAudio = new Audio("Sounds/Explosion.wav", 1);
 	m_BackgroundMusic = new Audio("Sounds/BackgroundMusic.wav", 2);
-
-	//Set posiiton of Character to top of screen and slow down stars if on main menu
-	if (m_DisplayMainMenu)
-	{
-		my_Character->SetPosition(Vector2D(my_Character->GetPosition().x, 100));
-		m_StarBackgroundPool0->SetStarPoolSpeed(30);
-		m_StarBackgroundPool1->SetStarPoolSpeed(50);
-		m_StarBackgroundPool2->SetStarPoolSpeed(90);
-	}
-
 	m_BackgroundMusic->Play(-1);
 }
 
 GameScreenLevel1::~GameScreenLevel1()
 {
-	//Memory Cleanup
-
 	delete my_Character;
 	my_Character = nullptr;
 
@@ -104,35 +67,8 @@ GameScreenLevel1::~GameScreenLevel1()
 	delete m_BackgroundTextureManager;
 	m_BackgroundTextureManager = nullptr;
 
-	delete m_Title;
-	m_Title = nullptr;
-
-	delete m_ControlsTitle;
-	m_ControlsTitle = nullptr;
-
-	delete m_MoveLeft;
-	m_MoveLeft = nullptr;
-
-	delete m_MoveRight;
-	m_MoveRight = nullptr;
-
-	delete m_LeftIcon;
-	m_LeftIcon = nullptr;
-
-	delete m_RightIcon;
-	m_RightIcon = nullptr;
-
-	delete m_LeftIconKB;
-	m_LeftIcon = nullptr;
-
-	delete m_RightIconKB;
-	m_RightIcon = nullptr;
-
 	delete m_UITextureManager;
 	m_UITextureManager = nullptr;
-
-	delete m_Coin;
-	m_Coin = nullptr;
 
 	delete m_CoinPool;
 	m_CoinPool = nullptr;
@@ -146,9 +82,6 @@ GameScreenLevel1::~GameScreenLevel1()
 	delete m_Distance;
 	m_Distance = nullptr;
 
-	delete m_InsertCoin;
-	m_InsertCoin = nullptr;
-
 	delete m_ExplosionAudio;
 	m_ExplosionAudio = nullptr;
 
@@ -158,116 +91,36 @@ GameScreenLevel1::~GameScreenLevel1()
 
 void GameScreenLevel1::Render()
 {
-	//Game Loop
-	if (m_IsRunning)
-	{
-		m_StarBackgroundPool0->Render();
-		m_StarBackgroundPool1->Render();
-		m_StarBackgroundPool2->Render();
-		m_ObstaclePool->Render();
-		m_CoinPool->Render();
-		m_Distance->RenderAt(to_string(m_DistanceTravelled) + " P", LANETWOCENTER, 100);
-		m_CoinHUDIcon->Render();
-		m_CoinCountText->RenderAt(to_string(m_CoinsCollected), 60, 20);
-		my_Character->Render();
-	}
-
-	//Main Menu Loop
-	if (m_DisplayMainMenu)
-	{
-		m_StarBackgroundPool0->Render();
-		m_StarBackgroundPool1->Render();
-		m_StarBackgroundPool2->Render();
-		m_Title->RenderAt("HyperSpeed", LANETWOCENTER, 200);
-		m_ControlsTitle->RenderAt("Controls", LANETWOCENTER, 275);
-		m_MoveLeft->RenderAt("Move Left : ", LANEONECENTER + 50, 350);
-		m_MoveRight->RenderAt("MoveRight : ", LANEONECENTER + 50, 400);
-		m_LeftIcon->Render();
-		m_RightIcon->Render();
-		m_LeftIconKB->Render();
-		m_RightIconKB->Render();
-		m_Coin->Render();
-		m_InsertCoin->RenderAt("Insert Coin to Play (A/B or Enter)", LANETWOCENTER, 550);
-		my_Character->Render();
-	}
+	m_StarBackgroundPool0->Render();
+	m_StarBackgroundPool1->Render();
+	m_StarBackgroundPool2->Render();
+	m_ObstaclePool->Render();
+	m_CoinPool->Render();
+	m_Distance->RenderAt(to_string(m_DistanceTravelled) + " P", LANETWOCENTER, 100);
+	m_CoinHUDIcon->Render();
+	m_CoinCountText->RenderAt(to_string(m_CoinsCollected), 60, 20);
+	my_Character->Render();
 }
 
 void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
 {
-	//For Testing Purposes
-	if (e.type == SDL_KEYUP)
-	{
-		switch (e.key.keysym.sym)
-		{
-		case SDLK_RETURN:
-			m_DisplayMainMenu = false;
-			m_IsRunning = true;
-			break;
-		case SDLK_BACKSPACE:
-			break;
-		}
-	}
-
-	//For Testing Purposes
-	if (e.type == SDL_JOYBUTTONUP)
-	{
-		switch (e.jbutton.button)
-		{
-		case 11:
-			m_DisplayMainMenu = false;
-			m_IsRunning = true;
-			break;
-		case 12:
-			m_DisplayMainMenu = false;
-			m_IsRunning = true;
-			break;
-		}
-	}
-
-	//Main Menu Update
-	if (m_DisplayMainMenu)
-	{
-		m_StarBackgroundPool0->Update(deltaTime, e);
-		m_StarBackgroundPool1->Update(deltaTime, e);
-		m_StarBackgroundPool2->Update(deltaTime, e);
-	}
-
-	//Game Update
 	if (m_IsRunning)
 	{
-		//If playing from the main menu
+		//Slide the ship down from the top before gameplay begins
 		if (m_MainMenuFlag)
 		{
-			//Check if the player is in position
 			if (my_Character->GetPosition().y < PLAYERHEIGHTPOS)
 			{
-				//Flag for if stars have been sped up
-				bool starsSpedUp = false;
-
-				//Set the character position over time to the game position.
-				my_Character->SetPosition(Vector2D(my_Character->GetPosition().x, my_Character->GetPosition().y + ((deltaTime * MOVEMENTSPEED)  * 3)));
-
-				//Speed up stars if not already done
-				if (!starsSpedUp)
-				{
-					m_StarBackgroundPool0->SetStarPoolSpeed(60);
-					m_StarBackgroundPool1->SetStarPoolSpeed(100);
-					m_StarBackgroundPool2->SetStarPoolSpeed(180);
-
-					starsSpedUp = true;
-				}
+				my_Character->SetPosition(Vector2D(my_Character->GetPosition().x, my_Character->GetPosition().y + ((deltaTime * MOVEMENTSPEED) * 3)));
 			}
 			else
 			{
-				//Finished, set main menu flag to false
 				m_MainMenuFlag = false;
 			}
 		}
 
-		//Update distance travelled
 		m_DistanceTravelled++;
 
-		//Update Stars, Character and Obstacle Pool
 		m_StarBackgroundPool0->Update(deltaTime, e);
 		m_StarBackgroundPool1->Update(deltaTime, e);
 		m_StarBackgroundPool2->Update(deltaTime, e);
@@ -275,7 +128,7 @@ void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
 		m_ObstaclePool->Update(deltaTime, e);
 		m_CoinPool->Update(deltaTime, e);
 
-		//Iterate over Obstacle Pool and check for collision
+		//Check obstacle collisions
 		std::vector<GameObject*>::iterator itr;
 
 		for (itr = m_ObstaclePool->GetPool().begin(); itr != m_ObstaclePool->GetPool().end(); ++itr)
@@ -296,16 +149,12 @@ void GameScreenLevel1::Update(float deltaTime, SDL_Event e)
 				m_CoinsCollected++;
 			}
 		}
-
 	}
-	//If not running and not in main menu change screen to death screen.
-	else if(!m_IsRunning && !m_DisplayMainMenu)
+	else
 	{
 		m_ExplosionAudio->Play(0);
 		m_BackgroundMusic->Pause();
 		m_GameScreenManager->SetHighScore(m_DistanceTravelled);
 		m_GameScreenManager->ChangeScreen(SCREEN_DEATHSCREEN, m_GameScreenManager);
 	}
-
-
 }

@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 	if (InitSDL())
 	{
 		game_Screen_Manager = new GameScreenManager(g_Renderer);
-		game_Screen_Manager->ChangeScreen(SCREEN_LEVEL1, game_Screen_Manager);
+		game_Screen_Manager->ChangeScreen(SCREEN_MAINMENU, game_Screen_Manager);
 
 		//Set the time
 		g_Old_Time = SDL_GetTicks();

@@ -139,6 +139,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GameScreenLevel1.cpp" />
+    <ClCompile Include="GameScreenMainMenu.cpp" />
     <ClCompile Include="GameScreenManager.cpp" />
     <ClCompile Include="GameText.cpp" />
     <ClCompile Include="main.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GameScreenLevel1.h" />
+    <ClInclude Include="GameScreenMainMenu.h" />
     <ClInclude Include="GameScreenManager.h" />
     <ClInclude Include="DeathScreen.h" />
     <ClInclude Include="GameText.h" />

@@ -22,7 +22,7 @@ class GameScreenLevel1 : public GameScreen
 
 public:
 
-	GameScreenLevel1(SDL_Renderer* renderer, GameScreenManager* manager, bool renderMainMenu);
+	GameScreenLevel1(SDL_Renderer* renderer, GameScreenManager* manager);
 	~GameScreenLevel1();
 
 	void Render() override;
@@ -42,21 +42,6 @@ private:
 	StarBackgroundPool* m_StarBackgroundPool2 = nullptr;
 	TextureManager* m_BackgroundTextureManager = nullptr;
 
-	//Text for Main Menu
-	GameText* m_Title = nullptr;
-	GameText* m_ControlsTitle = nullptr;
-	GameText* m_MoveRight = nullptr;
-	GameText* m_MoveLeft = nullptr;
-
-	GameText* m_InsertCoin = nullptr;
-
-	UIObject* m_LeftIcon = nullptr;
-	UIObject* m_RightIcon = nullptr;
-	UIObject* m_LeftIconKB = nullptr;
-	UIObject* m_RightIconKB = nullptr;
-
-	UIObject* m_Coin = nullptr;
-
 	TextureManager* m_UITextureManager = nullptr;
 
 	//Coin Pool
@@ -70,7 +55,7 @@ private:
 
 	int m_DistanceTravelled = 0;
 
-	bool m_IsRunning, m_DisplayMainMenu, m_MainMenuFlag;
+	bool m_IsRunning, m_MainMenuFlag;
 
 	//Game Audio
 	Audio* m_ExplosionAudio = nullptr;
