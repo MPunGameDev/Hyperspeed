@@ -98,7 +98,7 @@ void GameScreenLevel1::Render()
 	m_CoinPool->Render();
 	m_Distance->RenderAt(to_string(m_DistanceTravelled) + " P", LANETWOCENTER, 100);
 	m_CoinHUDIcon->Render();
-	m_CoinCountText->RenderAt(to_string(m_CoinsCollected), 60, 20);
+	m_CoinCountText->RenderAt(to_string(m_CoinsCollected), 90, 20);
 	my_Character->Render();
 }
 
